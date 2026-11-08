@@ -1,0 +1,123 @@
+/* Reports: the catalogue, the parameter form and the document preview. */
+
+.reports { display: flex; flex-direction: column; }
+.rp-grid { display: grid; grid-template-columns: minmax(260px, 330px) minmax(0, 1fr); gap: 14px; align-items: start; }
+.rp-main { display: flex; flex-direction: column; gap: 14px; min-width: 0; }
+.rp-left { position: sticky; top: calc(var(--header-h) + 14px); max-height: calc(100vh - var(--header-h) - 40px); overflow: auto; }
+
+/* catalogue */
+.rp-catalogue { display: flex; flex-direction: column; gap: 6px; }
+.rp-card {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  background: var(--panel-2);
+  text-align: left;
+  cursor: pointer;
+  transition: border-color var(--t-fast), background var(--t-fast);
+}
+.rp-card:hover { border-color: var(--accent-line); }
+.rp-card.on { border-color: var(--accent); background: var(--accent-soft); }
+.rp-card-title { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.rp-card-title b { color: var(--ink-0); font-weight: 620; }
+.rp-card-text { color: var(--ink-2); font-size: 12.5px; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+.rp-card-meta { color: var(--ink-3); font-size: 11.5px; }
+.rp-not { margin-top: 10px; font-size: 12.5px; color: var(--ink-2); }
+.rp-not summary { cursor: pointer; color: var(--ink-1); font-weight: 600; padding: 6px 2px; }
+.rp-not ul { margin: 6px 0 0; padding-left: 18px; display: flex; flex-direction: column; gap: 6px; }
+.rp-not b { color: var(--ink-1); font-weight: 600; }
+
+/* form */
+.rp-form { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px 18px; }
+.rp-intro, .rp-actions { grid-column: 1 / -1; }
+.rp-intro h2 { font-size: 18px; }
+.rp-intro p { margin-top: 4px; max-width: 75ch; text-wrap: pretty; }
+.rp-field:has(.rp-checks) { grid-column: 1 / -1; }
+.rp-input, .rp-select {
+  width: 100%;
+  height: 38px;
+  padding: 0 11px;
+  border-radius: 9px;
+  border: 1px solid var(--line-2);
+  background: var(--bg-2);
+  color: var(--ink-0);
+  outline: none;
+}
+.rp-input:focus, .rp-select:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
+.rp-static { padding: 8px 0; color: var(--ink-0); font-weight: 560; }
+.rp-checks { display: flex; flex-wrap: wrap; gap: 6px 14px; }
+.rp-checks .check { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; color: var(--ink-1); cursor: pointer; }
+.rp-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; }
+.rp-warn { display: flex; gap: 6px; align-items: center; color: var(--warn); font-size: 12.5px; width: 100%; }
+.seg button:disabled { opacity: 0.45; cursor: not-allowed; }
+.rp-runbox:empty { display: none; }
+.rp-progress { display: flex; align-items: center; gap: 10px; margin-top: 14px; padding: 10px 12px; border-radius: 10px; background: var(--panel-2); border: 1px solid var(--line); }
+.rp-progress b { color: var(--ink-0); font-weight: 600; }
+.rp-failed { color: var(--bad); border-color: var(--bad-line); background: var(--bad-soft); }
+
+/* recent runs */
+.rp-sub { font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-3); margin: 18px 0 8px; }
+.rp-runs { display: flex; flex-wrap: wrap; gap: 8px; }
+.rp-run { display: flex; flex-direction: column; align-items: flex-start; gap: 2px; padding: 8px 10px; border-radius: 9px; border: 1px solid var(--line); background: var(--panel-2); cursor: pointer; max-width: 300px; text-align: left; }
+.rp-run span { font-size: 12px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 100%; }
+.rp-run.on { border-color: var(--accent); }
+.rp-run:disabled { cursor: default; opacity: 0.7; }
+
+/* preview */
+.rp-placeholder { display: grid; place-items: center; gap: 10px; padding: 48px 20px; color: var(--ink-3); text-align: center; }
+.rp-doc-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; flex-wrap: wrap; padding-bottom: 14px; border-bottom: 1px solid var(--line); margin-bottom: 14px; }
+.rp-eyebrow { font-size: 10.5px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent); font-weight: 700; }
+.rp-doc-title h2 { font-size: 24px; font-stretch: 110%; letter-spacing: -0.02em; line-height: 1.15; margin-top: 4px; text-wrap: balance; }
+.rp-subject { font-size: 15px; color: var(--ink-1); margin: 4px 0; overflow-wrap: anywhere; }
+.rp-doc-tools { display: flex; gap: 8px; flex-wrap: wrap; }
+.rp-kpis { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; }
+.rp-kpi { position: relative; display: flex; flex-direction: column; gap: 2px; padding: 10px 12px 10px 14px; border-radius: var(--radius-sm); border: 1px solid var(--line); background: var(--panel-2); min-width: 0; }
+.rp-kpi.toned::before { content: ""; position: absolute; left: 0; top: 8px; bottom: 8px; width: 3px; border-radius: 0 2px 2px 0; background: var(--tone); }
+.rp-kpi-label { font-size: 10.5px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-2); font-weight: 650; }
+.rp-kpi-num { font-size: 24px; line-height: 1.15; color: var(--ink-0); font-variant-numeric: tabular-nums; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.rp-kpi-note { font-size: 12px; color: var(--ink-2); }
+.rp-section { padding-top: 18px; margin-top: 18px; border-top: 1px solid var(--line); display: flex; flex-direction: column; gap: 14px; }
+.rp-section h3 { font-size: 18px; letter-spacing: -0.01em; line-height: 1.2; text-wrap: balance; }
+.rp-lead { margin-top: -8px; max-width: 75ch; text-wrap: pretty; }
+.rp-block h4 { font-size: 13.5px; color: var(--ink-0); font-weight: 620; margin: 0 0 8px; }
+.rp-block-head { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; flex-wrap: wrap; }
+.rp-table-tools { display: inline-flex; align-items: center; gap: 10px; }
+.rp-table td { white-space: normal; overflow-wrap: anywhere; max-width: 420px; vertical-align: top; }
+.rp-table td.num, .rp-table th.num { text-align: right; white-space: nowrap; }
+.rp-table td.mono { font-family: var(--mono); font-size: 12px; }
+.rp-empty { text-align: center; padding: 16px !important; }
+.rp-facts { display: grid; grid-template-columns: minmax(120px, 200px) minmax(0, 1fr); gap: 6px 16px; margin: 0; font-size: 13px; }
+.rp-facts dt { color: var(--ink-3); }
+.rp-facts dd { margin: 0; color: var(--ink-1); overflow-wrap: anywhere; }
+.rp-note { font-size: 12.5px; color: var(--ink-2); padding: 6px 0 6px 12px; border-left: 2px solid var(--line-2); max-width: 75ch; text-wrap: pretty; }
+.rp-note b { color: var(--ink-0); }
+.rp-note-gap { border-left-color: var(--warn); }
+.rp-note-warn { border-left-color: var(--sev-high); }
+.rp-text { max-width: 75ch; }
+.rp-legend { display: flex; flex-wrap: wrap; gap: 6px 16px; font-size: 12px; color: var(--ink-2); margin: 6px 0 8px; }
+.rp-legend span { display: inline-flex; align-items: center; gap: 6px; }
+.rp-legend i { width: 9px; height: 9px; border-radius: 2px; display: inline-block; }
+.rp-legend b { color: var(--ink-0); font-variant-numeric: tabular-nums; font-weight: 600; }
+.rp-chart { position: relative; height: 150px; }
+.rp-series { display: block; width: 100%; height: 100%; overflow: visible; }
+.rp-series g:focus { outline: none; }
+.rp-series g:hover rect:not([fill="transparent"]), .rp-series g:focus rect:not([fill="transparent"]) { filter: brightness(1.15); }
+.rp-series .rp-gridline { stroke: var(--grid); stroke-width: 1; vector-effect: non-scaling-stroke; }
+.rp-max { position: absolute; right: 0; top: -2px; font-size: 11px; color: var(--ink-3); background: var(--panel); padding: 0 4px; }
+.rp-axis { position: relative; height: 18px; margin-top: 4px; }
+.rp-axis span { position: absolute; transform: translateX(-50%); font-size: 11px; color: var(--ink-3); white-space: nowrap; font-family: var(--mono); }
+
+@media (max-width: 1100px) {
+  .rp-grid { grid-template-columns: 1fr; }
+  .rp-left { position: static; max-height: none; }
+}
+@media (max-width: 640px) {
+  .rp-form { grid-template-columns: 1fr; }
+  .rp-facts { grid-template-columns: 1fr; gap: 2px; }
+  .rp-facts dd { margin-bottom: 8px; }
+  .rp-doc-title h2 { font-size: 21px; }
+}

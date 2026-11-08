@@ -1,0 +1,11 @@
+node_modules/
+backend/dist/
+.env
+*.env
+/data/
+/cache/
+.DS_Store
+*.log
+*.mmdb
+*.mmdb.gz
+/out/

@@ -1,0 +1,18 @@
+{
+  "fusion": {
+    "snapshot": "2026-10-04",
+    "version": "0.102.1493",
+    "schemas": 31,
+    "topLevelFields": 1710,
+    "fields": 4927,
+    "described": 4146,
+    "oldNames": 219
+  },
+  "datalake": {
+    "snapshot": "2026-10-05",
+    "groups": 13,
+    "tables": 225,
+    "columns": 8264,
+    "described": 6763
+  }
+}

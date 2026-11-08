@@ -1,0 +1,124 @@
+/* Design tokens. Dark is the default (walls); light is selected, not inverted.
+   Severity and status colours mean state only and always travel with an icon
+   and a label. MDR and self-managed are categorical (validated pair). */
+
+@font-face {
+  font-family: "Archivo";
+  src: url("/fonts/archivo-latin-wdth-normal.woff2") format("woff2-variations");
+  font-weight: 100 900;
+  font-stretch: 62% 125%;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Geist Mono";
+  src: url("/fonts/geist-mono-latin-wght-normal.woff2") format("woff2");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  color-scheme: dark;
+  --bg: #070a12;
+  --bg-2: #0b1020;
+  --panel: #0f1422;
+  --panel-2: #131a2b;
+  --panel-3: #1a2236;
+  --line: rgba(160, 180, 220, 0.11);
+  --line-2: rgba(160, 180, 220, 0.2);
+  --ink-0: #f4f6fb;
+  --ink-1: #dfe4ef;
+  --ink-2: #a3acc0;
+  --ink-3: #747e96;
+  --ink-4: #4d566c;
+
+  --accent: #7ab8ff;
+  --accent-ink: #0a1730;
+  --accent-soft: rgba(122, 184, 255, 0.14);
+  --accent-line: rgba(122, 184, 255, 0.42);
+
+  /* categorical: who handles the case */
+  --mdr: #d55181;
+  --self: #3987e5;
+  --unclaimed: #7a8399;
+
+  /* severity (status steps) */
+  --sev-critical: #e5484d;
+  --sev-high: #ec835a;
+  --sev-medium: #fab219;
+  --sev-low: #3987e5;
+  --sev-info: #898781;
+
+  --good: #2fbf71;
+  --warn: #fab219;
+  --bad: #e5484d;
+  --good-soft: rgba(47, 191, 113, 0.14);
+  --warn-soft: rgba(250, 178, 25, 0.13);
+  /* AI usage flow: what AI Defense did. Light mode takes a darker amber (3:1 on the panel). */
+  --afl-blocked: var(--bad);
+  --afl-warned: var(--warn);
+  --afl-allowed: var(--accent);
+  --afl-neutral: var(--ink-3);
+  /* AI app marks: plain white or black, as the brands that set a colour ask. */
+  --logo-ink: #ffffff;
+  --bad-soft: rgba(229, 72, 77, 0.15);
+  --bad-line: rgba(229, 72, 77, 0.45);
+  --warn-line: rgba(250, 178, 25, 0.42);
+
+  --grid: rgba(160, 180, 220, 0.08);
+  --axis: rgba(160, 180, 220, 0.22);
+
+  --radius: 14px;
+  --radius-sm: 9px;
+  --gap: 14px;
+  --header-h: 58px;
+
+  --font: "Archivo", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  --ease: cubic-bezier(0.2, 0.75, 0.15, 1);
+  --ease-in: cubic-bezier(0.55, 0, 0.75, 0.2);
+  --spring: cubic-bezier(0.34, 1.4, 0.5, 1);
+  --t-fast: 180ms;
+  --t-med: 420ms;
+  --t-slow: 900ms;
+
+  --grain: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 0.05 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+}
+
+:root[data-theme="light"] {
+  color-scheme: light;
+  --bg: #f3f4f1;
+  --bg-2: #ecede9;
+  --panel: #fcfcfb;
+  --panel-2: #f6f6f3;
+  --panel-3: #ecece7;
+  --line: rgba(11, 20, 40, 0.1);
+  --line-2: rgba(11, 20, 40, 0.18);
+  --ink-0: #0b0d12;
+  --ink-1: #1d212b;
+  --ink-2: #52576a;
+  /* small text: at least 4.5:1 on every surface down to --panel-3 */
+  --ink-3: #62687a;
+  --ink-4: #a2a7b4;
+  --accent: #2a6fd0;
+  --accent-ink: #ffffff;
+  --accent-soft: rgba(42, 111, 208, 0.1);
+  --accent-line: rgba(42, 111, 208, 0.4);
+  --mdr: #c2306a;
+  --self: #2a78d6;
+  --unclaimed: #8a8f9c;
+  --sev-low: #2a78d6;
+  --sev-info: #898781;
+  --good: #0c8f4a;
+  --good-soft: rgba(12, 143, 74, 0.1);
+  --warn-soft: rgba(250, 178, 25, 0.16);
+  --bad-soft: rgba(208, 59, 59, 0.1);
+  --bad: #d03b3b;
+  --sev-critical: #d03b3b;
+  --grid: rgba(11, 20, 40, 0.07);
+  --axis: rgba(11, 20, 40, 0.22);
+  --grain: none;
+  --afl-warned: #c88400;
+  --logo-ink: #000000;
+}

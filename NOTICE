@@ -1,0 +1,38 @@
+SecOps Toolkit
+Copyright 2026 Aaron Jacobs
+Licensed under the MIT License (LICENSE).
+
+Unofficial. Uses the public Sophos APIs. SecOps Toolkit is not made, endorsed
+or supported by Sophos.
+
+backend/src/vendor/sophos-core is vendored from @notfusion/sophos-core
+(NotFusion, Copyright 2026 Aaron Jacobs), licensed under the Apache License 2.0
+AND the MIT License. Both notices are kept beside it:
+backend/src/vendor/sophos-core/LICENSE (Apache-2.0) and LICENSE-MIT. Parts of it
+are adapted from sophos-central-mcp-server (https://github.com/Aaronjacobs000/sophos-mcp),
+MIT License. The toolkit's local changes to those files are listed in
+ATTRIBUTIONS.md.
+
+backend/src/config/network.ts and backend/src/middleware/ (local-host,
+client-ip, json-body, error-handler) are copied from sophos-tenant-migration-tool
+(https://github.com/Aaronjacobs000/sophos-tenant-migration-tool), MIT License.
+
+Third-party assets, all bundled for offline use:
+- Archivo variable font, SIL Open Font License 1.1 (frontend/fonts/OFL-Archivo.txt).
+- Geist Mono font, SIL Open Font License 1.1 (frontend/fonts/OFL-GeistMono.txt).
+- World map: world-atlas 2.0.2 (ISC, frontend/vendor/LICENSE-world-atlas.txt),
+  derived from Natural Earth, which is in the public domain.
+- mmdb-lib (MIT), the MaxMind DB format reader used for DB-IP City Lite.
+- AI app marks in frontend/js/ai-logos.js: Simple Icons 16.36.0 (CC0-1.0,
+  https://simpleicons.org). Each mark is a trademark of its owner, shown only
+  to name the app; ATTRIBUTIONS.md lists them and the brand terms checked.
+- Optional, not bundled: DB-IP City Lite (CC BY 4.0, https://db-ip.com),
+  downloaded only when the person asks for it.
+
+frontend/data/atlas-fusion.json is a dated snapshot of the schema metadata the
+undocumented Sophos Fusion GraphQL query qlSchemaMapV1 returns.
+frontend/data/atlas-datalake.json is built from the public Sophos Data Lake
+schema JSON on docs.sophos.com. Both describe Sophos's schemas and remain
+Sophos's material; this project's licence does not cover them.
+
+Sophos, Sophos Central and Sophos Fusion are trademarks of Sophos Limited.

@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>SecOps Toolkit</title>
+  <meta name="description" content="SecOps dashboards, wall boards and a schema explorer. Unofficial. Uses the public Sophos APIs.">
+  <meta name="color-scheme" content="dark light">
+  <link rel="icon" href="/img/mark.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/css/tokens.css">
+  <link rel="stylesheet" href="/css/app.css">
+  <link rel="stylesheet" href="/css/views.css">
+  <link rel="stylesheet" href="/css/reports.css">
+  <script type="module" src="/js/app.js"></script>
+</head>
+<body>
+  <div class="atmos" aria-hidden="true"></div>
+  <header class="top" id="top">
+    <a class="brand" href="#/front" aria-label="SecOps Toolkit, overview">
+      <img src="/img/mark.svg" alt="" width="30" height="30">
+      <span class="brand-text"><b>SecOps Toolkit</b><small>Unofficial. Uses the public Sophos APIs.</small></span>
+    </a>
+    <nav class="nav" id="nav" aria-label="Screens"></nav>
+    <div class="top-right">
+      <div class="ctx" id="ctx"></div>
+      <div class="budget" id="budget" title="Sophos API calls this credential made in the last minute"></div>
+      <button class="icon-btn" id="wall-btn" type="button" title="Wall mode: full screen, rotating boards" aria-label="Wall mode"></button>
+      <button class="icon-btn" id="theme-btn" type="button" title="Light or dark" aria-label="Switch light or dark"></button>
+      <button class="icon-btn menu-btn" id="menu-btn" type="button" aria-label="Menu" aria-expanded="false"></button>
+    </div>
+  </header>
+  <div class="wallbar" id="wallbar" hidden></div>
+  <div class="banner" id="banner" hidden></div>
+  <main id="view" class="view" tabindex="-1"></main>
+  <footer class="foot" id="foot"></footer>
+  <div id="tip" class="tip" role="tooltip" hidden></div>
+  <div id="toasts" class="toasts" aria-live="polite"></div>
+</body>
+</html>

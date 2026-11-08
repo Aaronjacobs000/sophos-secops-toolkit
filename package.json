@@ -1,0 +1,31 @@
+{
+  "name": "sophos-secops-toolkit",
+  "version": "0.1.0",
+  "description": "Unofficial, locally run SecOps dashboards, wall boards and a schema explorer built on the public Sophos APIs.",
+  "type": "module",
+  "private": true,
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Aaronjacobs000/sophos-secops-toolkit.git"
+  },
+  "engines": {
+    "node": ">=22.13"
+  },
+  "scripts": {
+    "build": "tsc",
+    "start": "npm run build && node backend/dist/server.js",
+    "demo": "npm run build && node backend/dist/server.js --demo",
+    "test": "npm run build && node --test test/*.test.mjs",
+    "atlas": "node scripts/build-atlas.mjs"
+  },
+  "dependencies": {
+    "express": "^4.21.2",
+    "mmdb-lib": "^3.0.3"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.21",
+    "@types/node": "^22.20.0",
+    "typescript": "~5.9.3"
+  }
+}

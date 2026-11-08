@@ -1,0 +1,39 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        # The oldest Node the toolkit supports, and the current LTS.
+        node: ["22.13.0", "24"]
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: ${{ matrix.node }}
+          cache: npm
+      - run: npm ci
+      - run: npm test
+      - name: Tests in a time zone west of UTC
+        if: matrix.os == 'ubuntu-latest'
+        run: node --test test/*.test.mjs
+        env:
+          TZ: America/Los_Angeles
+      - name: Start from a clean checkout in demo mode
+        shell: bash
+        run: |
+          PORT=3299 SECOPS_DATA_DIR="$RUNNER_TEMP/data" SECOPS_KEY_DIR="$RUNNER_TEMP/keys" node backend/dist/server.js --demo &
+          for i in $(seq 1 30); do curl -sf http://127.0.0.1:3299/api/status && break; sleep 1; done
+          curl -sf http://127.0.0.1:3299/api/view/front > /dev/null
+          curl -sf http://127.0.0.1:3299/ | grep -q "Unofficial. Uses the public Sophos APIs."
