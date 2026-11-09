@@ -56,20 +56,21 @@ let graphemes: Intl.Segmenter | null = null;
 
 /**
  * A file name part: letters and digits of any script, marks on them, and . @ _ -, so nothing a file system
- * or a header treats specially. A letter that is an ASCII letter with accents comes out as it always has (the
- * accent as a hyphen); any other letter stays itself, so a subject in Chinese or Polish is kept, not dropped.
+ * or a header treats specially. A letter that is an ASCII letter with accents comes out as that letter, its
+ * accents dropped (Ramirez with an accented i gives ramirez); any other letter stays itself with its marks, so
+ * a subject in Chinese or Polish is kept, not dropped.
  */
 function slug(s: string): string {
-  const mapped = [...s.normalize("NFC")]
-    .map((ch) => {
+  graphemes ??= new Intl.Segmenter(undefined, { granularity: "grapheme" });
+  const mapped = [...graphemes.segment(s.normalize("NFC"))]
+    .map(({ segment: ch }) => {
       const d = ch.normalize("NFKD");
-      return /[A-Za-z0-9]/.test(d) && !/(?![\x00-\x7f])[\p{L}\p{N}]/u.test(d) ? d.replace(/\p{M}/gu, "-") : ch;
+      return /[A-Za-z0-9]/.test(d) && !/(?![\x00-\x7f])[\p{L}\p{N}]/u.test(d) ? d.replace(/\p{M}/gu, "") : ch;
     })
     .join("")
     .replace(/[^\w.@\p{L}\p{N}\p{M}-]+/gu, "-")
     .replace(/-+/g, "-")
     .replace(/^-|-$/g, "");
-  graphemes ??= new Intl.Segmenter(undefined, { granularity: "grapheme" });
   return [...graphemes.segment(mapped)].slice(0, 48).map((g) => g.segment).join("").toLowerCase();
 }
 

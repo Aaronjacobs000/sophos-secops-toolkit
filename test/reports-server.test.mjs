@@ -99,6 +99,19 @@ test("a PDF or CSV about someone named in another script downloads under their n
   assert.match(decodeURIComponent(csv.headers.get("content-disposition").split("UTF-8''")[1]), new RegExp(`^secops-user-investigation-王芳-\\d{4}-\\d{2}-\\d{2}-${table.id}\\.csv$`));
 });
 
+test("a PDF or CSV about someone with an accented Latin name downloads under the name without its accents", async () => {
+  const cat = await (await fetch(`${base}/api/reports`)).json();
+  const fusion = cat.tenants.find((t) => t.generation === "fusion");
+  const { run } = await (await fetch(`${base}/api/reports/run`, json({ reportId: "user", tenant: fusion.id, window: "7d", timeZone: "Australia/Sydney", params: { user: "Ramírez" } }))).json();
+  const done = await finished(run.id);
+  const pdf = await fetch(`${base}/api/reports/runs/${run.id}/pdf`);
+  assert.equal(pdf.status, 200);
+  assert.match(pdf.headers.get("content-disposition"), /^attachment; filename="secops-user-investigation-ramirez-\d{4}-\d{2}-\d{2}\.pdf"$/);
+  const table = done.document.sections.flatMap((s) => s.blocks).find((b) => b.kind === "table");
+  const csv = await fetch(`${base}/api/reports/runs/${run.id}/csv/${table.id}`);
+  assert.match(csv.headers.get("content-disposition"), new RegExp(`^attachment; filename="secops-user-investigation-ramirez-\\d{4}-\\d{2}-\\d{2}-${table.id}\\.csv"$`));
+});
+
 test("a request a report can't run is refused before anything starts", async () => {
   const bad = [
     [{ reportId: "user", tenant: "all", params: { user: "k.walsh" } }, /one tenant/],

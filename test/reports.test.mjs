@@ -467,6 +467,13 @@ test("export file names keep a subject in any script, and nothing a file system 
   // As before for names with an ASCII form.
   assert.equal(named("k.walsh@harbourline.example"), "secops-user-investigation-k.walsh@harbourline.example-2026-11-09.pdf");
   assert.equal(named("Zoë Brontë"), "secops-user-investigation-zoe-bronte-2026-11-09.pdf");
+  // An ASCII letter drops its accents wherever it sits in a word; a letter with no ASCII form keeps its marks.
+  assert.equal(named("Ramírez"), "secops-user-investigation-ramirez-2026-11-09.pdf");
+  assert.equal(named("Nguyễn Thị Thu Hằng"), "secops-user-investigation-nguyen-thi-thu-hang-2026-11-09.pdf", "two accents on one letter");
+  assert.equal(named("jeg̃uaka"), "secops-user-investigation-jeguaka-2026-11-09.pdf", "an accent with no precomposed letter");
+  assert.equal(named("Søren Kraków"), "secops-user-investigation-søren-krakow-2026-11-09.pdf", "ø has no ASCII form");
+  assert.equal(named("प्रिया शर्मा"), "secops-user-investigation-प्रिया-शर्मा-2026-11-09.pdf", "Devanagari keeps its vowel signs");
+  assert.equal(named("José Ramírez 王芳"), "secops-user-investigation-jose-ramirez-王芳-2026-11-09.pdf");
   assert.equal(named('a/b\\c:d*e?"<>|f'), "secops-user-investigation-a-b-c-d-e-f-2026-11-09.pdf");
   assert.equal(named("王".repeat(60)), `secops-user-investigation-${"王".repeat(48)}-2026-11-09.pdf`, "48 characters at most");
   assert.equal(named("𠀀".repeat(60)), `secops-user-investigation-${"𠀀".repeat(48)}-2026-11-09.pdf`, "never half a character");
