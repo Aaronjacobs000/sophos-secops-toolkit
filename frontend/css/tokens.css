@@ -30,7 +30,8 @@
   --ink-0: #f4f6fb;
   --ink-1: #dfe4ef;
   --ink-2: #a3acc0;
-  --ink-3: #747e96;
+  /* small text: at least 4.5:1 on every surface, tinted tiles and the selected report card included */
+  --ink-3: #8c97af;
   --ink-4: #4d566c;
 
   --accent: #7ab8ff;
