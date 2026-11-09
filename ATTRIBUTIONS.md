@@ -32,7 +32,7 @@ Through sophos-core: `TokenManager`, `TenantResolver`, `SophosClient`, `FusionCl
 
 | File | Source | Characters | Licence file |
 | --- | --- | --- | --- |
-| `noto-greek-cyrillic-{regular,bold}` | Noto Sans | Greek, Greek Extended, Cyrillic and its supplement and extensions, combining accents | `OFL-NotoSans.txt` |
+| `noto-latin-greek-cyrillic-{regular,bold}` | Noto Sans | Latin (Basic Latin to Latin Extended-B, IPA, spacing modifiers, Latin Extended Additional, C, D and E), Greek, Greek Extended, Cyrillic and its supplement and extensions, combining accents | `OFL-NotoSans.txt` |
 | `noto-arabic-{regular,bold}` | Noto Sans Arabic | Arabic, its supplement and extensions, presentation forms | `OFL-NotoSansArabic.txt` |
 | `noto-hebrew-{regular,bold}` | Noto Sans Hebrew | Hebrew, Hebrew presentation forms | `OFL-NotoSansHebrew.txt` |
 | `noto-thai-{regular,bold}` | Noto Sans Thai | Thai | `OFL-NotoSansThai.txt` |

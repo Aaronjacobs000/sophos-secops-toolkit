@@ -1,10 +1,11 @@
 #!/usr/bin/env node
-// Builds the fonts PDF reports use for text Helvetica can't draw: Greek and
-// Cyrillic, Arabic, Hebrew, Thai, Korean Hangul, and Chinese and Japanese
-// (CJK ideographs, kana and full-width forms). Each is a Noto font (SIL Open
-// Font License 1.1) from the google/fonts repository at a pinned commit,
-// checked against its SHA-256, pinned to a static weight and cut down to the
-// scripts it serves with HarfBuzz's subsetter, then Brotli-compressed.
+// Builds the fonts PDF reports use for text Helvetica can't draw: Latin
+// letters beyond Western European, Greek and Cyrillic, Arabic, Hebrew, Thai,
+// Korean Hangul, and Chinese and Japanese (CJK ideographs, kana and full-width
+// forms). Each is a Noto font (SIL Open Font License 1.1) from the
+// google/fonts repository at a pinned commit, checked against its SHA-256,
+// pinned to a static weight and cut down to the scripts it serves with
+// HarfBuzz's subsetter, then Brotli-compressed.
 //
 //   npm run build
 //   node scripts/build-pdf-fonts.mjs [--src <folder of downloaded sources>]
@@ -49,14 +50,16 @@ const LICENCES = {
 /** In the order the PDF writer tries them. */
 const FONTS = [
   {
-    id: "greek-cyrillic",
+    id: "latin-greek-cyrillic",
     name: "NotoSans",
     source: ["ofl/notosans/NotoSans[wdth,wght].ttf", "bfb7bb691513f12e734dc346c03a03f784912432d7e3fa8e56efcf906fe86b3d"],
     licence: "OFL-NotoSans.txt",
     axes: { wdth: 100 },
     weights: { regular: 400, bold: 700 },
-    // Combining accents ride on a Greek or Cyrillic letter in this font; after a Latin letter they stay with Helvetica.
-    unicodes: [...span(0x0300, 0x036f), ...span(0x0370, 0x03ff), ...span(0x0400, 0x052f), ...span(0x1c80, 0x1c8f), ...span(0x1f00, 0x1fff), ...span(0x2de0, 0x2dff), ...span(0xa640, 0xa69f), 0xfe2e, 0xfe2f, ...DOTTED_CIRCLE],
+    // Latin: a word with a letter Helvetica lacks (č, ł, ő, Vietnamese) is drawn whole from this font, so it needs the plain
+    // letters too. Combining accents ride on its Latin, Greek and Cyrillic letters.
+    unicodes: [...span(0x0020, 0x007e), ...span(0x00a0, 0x02ff), ...span(0x1e00, 0x1eff), ...span(0x2c60, 0x2c7f), ...span(0xa720, 0xa7ff), ...span(0xab30, 0xab6f),
+      ...span(0x0300, 0x036f), ...span(0x0370, 0x03ff), ...span(0x0400, 0x052f), ...span(0x1c80, 0x1c8f), ...span(0x1f00, 0x1fff), ...span(0x2de0, 0x2dff), ...span(0xa640, 0xa69f), 0xfe2e, 0xfe2f, ...DOTTED_CIRCLE],
   },
   {
     id: "arabic",

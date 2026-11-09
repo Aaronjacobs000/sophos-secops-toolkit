@@ -1,6 +1,7 @@
 /**
- * The bundled Noto fonts a PDF draws with when Helvetica can't: Greek and
- * Cyrillic, Arabic, Hebrew, Thai, Korean Hangul, and CJK ideographs and kana
+ * The bundled Noto fonts a PDF draws with when Helvetica can't: Latin letters
+ * beyond Western European with Greek and Cyrillic (Noto Sans), Arabic, Hebrew,
+ * Thai, Korean Hangul, and CJK ideographs and kana
  * (built by scripts/build-pdf-fonts.mjs, listed in backend/fonts/fonts.json).
  * fonts.json says which characters each font covers, so a font is read from
  * disk only when a report needs it. HarfBuzz shapes the text (Arabic joining,
@@ -43,6 +44,10 @@ export function fontFor(cp: number): number {
   }
   return -1;
 }
+
+/** Noto Sans: Latin, Greek and Cyrillic. A Latin word with a letter Helvetica lacks is drawn from it whole. */
+export const LATIN = FONTS.findIndex((f) => f.id === "latin-greek-cyrillic");
+if (LATIN < 0) throw new Error("backend/fonts/fonts.json lists no latin-greek-cyrillic font; run scripts/build-pdf-fonts.mjs again");
 
 export function coveredBy(font: number, cp: number): boolean {
   return FONTS[font]!.ranges.some(([a, b]) => cp >= a && cp <= b);

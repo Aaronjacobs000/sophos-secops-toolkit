@@ -4,7 +4,7 @@ import { mkdtempSync } from "node:fs";
 import { tmpdir } from "node:os";
 import path from "node:path";
 import * as hb from "harfbuzzjs";
-import { DEVICES, PEOPLE, SUBJECT, USER, withNonLatinNames } from "./helpers/non-latin.mjs";
+import { DEVICES, LATIN_EXTENDED, PEOPLE, SUBJECT, USER, withNames, withNonLatinNames } from "./helpers/non-latin.mjs";
 import { pdfObjects, pdfPages } from "./helpers/pdf.mjs";
 
 const root = mkdtempSync(path.join(tmpdir(), "secops-pdf-scripts-"));
@@ -38,7 +38,7 @@ function drawn(text, style = {}) {
   return pdfPages(writePdf([page], { title: "t", createdAt: 0 }))[0];
 }
 
-const LATIN = "Kate Walsh, HL-LT-0007, Zoë Brontë, Łukasz, café";
+const LATIN = "Kate Walsh, HL-LT-0007, Zoë Brontë, Søren, café";
 const ALL = [...PEOPLE.map((p) => p.name), ...DEVICES, SUBJECT, USER.name];
 
 test("a report with Chinese, Japanese, Korean, Thai, Cyrillic, Greek, Arabic and Hebrew names prints every name, never as ?", async () => {
@@ -109,7 +109,37 @@ test("a Latin-only report embeds nothing and draws every string in Helvetica, as
   assert.doesNotMatch(buf.toString("latin1"), /FontFile2|Type0|ActualText/);
   const objects = pdfObjects(buf);
   assert.deepEqual([...objects.values()].filter((o) => /\/Type \/Font\b/.test(o.dict)).map((o) => /\/BaseFont \/(\S+)/.exec(o.dict)[1]), ["Helvetica", "Helvetica-Bold"]);
-  assert.match(drawn(LATIN).content, /^BT \/F1 10 Tf 0 0 0 rg 10 50 Td \(Kate Walsh, HL-LT-0007, Zo\\353 Bront\\353, Lukasz, caf\\351\) Tj ET$/);
+  assert.match(drawn(LATIN).content, /^BT \/F1 10 Tf 0 0 0 rg 10 50 Td \(Kate Walsh, HL-LT-0007, Zo\\353 Bront\\353, S\\370ren, caf\\351\) Tj ET$/);
+});
+
+test("Latin letters Helvetica lacks keep their accents: the word prints whole in Noto Sans and copies back", () => {
+  const regular = (page) => [...page.fonts.values()].filter((f) => f.type0).map((f) => f.baseFont.replace(/^[A-Z]{6}\+/, ""));
+  for (const name of [...LATIN_EXTENDED.people, ...LATIN_EXTENDED.devices, "jeg\u0303uaka"]) {
+    const page = drawn(name);
+    assert.deepEqual(page.texts, [name.normalize("NFC")], `${name} copies back as itself`);
+    assert.deepEqual(regular(page), ["NotoSans-Regular"], `${name} draws from Noto Sans`);
+  }
+  // Only the word that needs it leaves Helvetica, and that word goes whole, so its letters match.
+  const runs = (text) => layoutLine(text, "regular").runs.map((r) => (r.kind === "std" ? `H:${String.fromCharCode(...r.codes)}` : `N:${r.glyphs.map((g) => g.text).join("")}`));
+  assert.deepEqual(runs("Antonín Dvořák"), ["H:Antonín ", "N:Dvořák"]);
+  assert.deepEqual(runs("Łukasz Nowak-Kowalski"), ["N:Łukasz", "H: Nowak-Kowalski"]);
+  assert.deepEqual(runs("Nguyễn Thị Thu Hằng"), ["N:Nguyễn", "H: ", "N:Thị", "H: Thu ", "N:Hằng"]);
+  // An accent with no precomposed letter (g with a tilde, Guarani) sits on its letter instead of printing "?".
+  assert.deepEqual(runs("jeg\u0303uaka"), ["N:jeg\u0303uaka"]);
+  assert.ok(measure("Dvořák", "regular", 10) > measure("Dvo", "regular", 10));
+  const bold = drawn("Łukasz Wróblewski", { face: "bold" });
+  assert.doesNotMatch(bold.content, /Tr/, "Noto Sans has a real bold");
+  assert.deepEqual(regular(bold), ["NotoSans-Bold"]);
+});
+
+test("a report with Central European, Turkish and Vietnamese names prints every name with its accents", async () => {
+  for (const req of [{ reportId: "detections", window: "7d" }, { reportId: "user", window: "7d", params: { user: "m.nguyen" } }]) {
+    const doc = withNames(await demoRun("tenant", { ...req, timeZone: "UTC" }), LATIN_EXTENDED);
+    const text = pdfPages(renderPdf(doc)).flatMap((p) => p.texts).join("\n");
+    for (const name of LATIN_EXTENDED.people) assert.ok(text.includes(name), `${req.reportId}: ${name} prints`);
+    if (req.reportId === "detections") for (const d of LATIN_EXTENDED.devices) assert.ok(text.includes(d), `${req.reportId}: device ${d} prints`);
+    assert.doesNotMatch(text, /\?|\uFFFD/, `${req.reportId}: no question marks and nothing unreadable`);
+  }
 });
 
 test("Arabic letters join, Thai and Hebrew marks sit on their letters, and CJK is a full em wide", () => {

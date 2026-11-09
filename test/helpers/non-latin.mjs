@@ -23,14 +23,27 @@ export const USER = { name: "فاطمة الزهراء", email: "f.alzahra@harbo
 const PERSON_KEYS = new Set(["users", "user", "account", "person", "owner", "from", "to"]);
 const DEVICE_KEYS = new Set(["hosts", "host", "device"]);
 
+/** Latin letters Helvetica has no glyph for: Czech, Polish, Hungarian, Vietnamese, Romanian, Turkish, Croatian, Latvian, Lithuanian, Maltese. */
+export const LATIN_EXTENDED = {
+  people: ["Antonín Dvořák", "Łukasz Wróblewski", "Kőváry Zsófia", "Nguyễn Thị Thu Hằng", "Ştefan Ţăran", "Şükrü Saraçoğlu", "Đurđica Šimić", "Jānis Bērziņš", "Žydrūnė Gintautė", "Ġużeppi Ħabib"],
+  devices: ["ŁÓDŹ-LT-07", "HÀ-NỘI-LT-03", "BUCUREŞTI-SRV-01", "İSTANBUL-LT-02", "BRNO-Dvořák-05"],
+  subject: "Žďár Logistika s.r.o.",
+  user: { name: "Nguyễn Thị Thu Hằng", email: "h.nguyen@harbourline.example" },
+};
+
 /** A copy of `doc` with non-Latin names in it, cycling through every script. */
 export function withNonLatinNames(doc) {
+  return withNames(doc, { people: PEOPLE.map((p) => p.name), devices: DEVICES, subject: SUBJECT, user: USER });
+}
+
+/** A copy of `doc` with the given names in its person and device cells, charts, directory record and subject. */
+export function withNames(doc, names) {
   const out = structuredClone(doc);
   let p = 0;
   let d = 0;
-  const person = () => PEOPLE[p++ % PEOPLE.length].name;
-  const device = () => DEVICES[d++ % DEVICES.length];
-  out.subject = doc.reportId === "user" ? `${USER.name} (${USER.email})` : SUBJECT;
+  const person = () => names.people[p++ % names.people.length];
+  const device = () => names.devices[d++ % names.devices.length];
+  out.subject = doc.reportId === "user" ? `${names.user.name} (${names.user.email})` : names.subject;
   for (const s of out.sections) {
     for (const b of s.blocks) {
       if (b.kind === "table") {
@@ -44,7 +57,7 @@ export function withNonLatinNames(doc) {
       } else if (b.kind === "bars" && /users|devices/i.test(b.title)) {
         for (const row of b.rows) row.label = /users/i.test(b.title) ? person() : device();
       } else if (b.kind === "facts") {
-        for (const item of b.items) if (item.label === "Name") item.value = USER.name;
+        for (const item of b.items) if (item.label === "Name") item.value = names.user.name;
       }
     }
   }

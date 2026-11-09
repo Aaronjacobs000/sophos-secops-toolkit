@@ -2,21 +2,22 @@
  "source": "https://github.com/google/fonts/tree/5bb28733cec313b63fbd415b574b5ae35c8aa8b8",
  "fonts": [
   {
-   "id": "greek-cyrillic",
+   "id": "latin-greek-cyrillic",
    "name": "NotoSans",
    "licence": "OFL-NotoSans.txt",
    "source": "ofl/notosans/NotoSans[wdth,wght].ttf",
    "sourceSha256": "bfb7bb691513f12e734dc346c03a03f784912432d7e3fa8e56efcf906fe86b3d",
    "files": {
-    "regular": "noto-greek-cyrillic-regular.ttf.br",
-    "bold": "noto-greek-cyrillic-bold.ttf.br"
+    "regular": "noto-latin-greek-cyrillic-regular.ttf.br",
+    "bold": "noto-latin-greek-cyrillic-bold.ttf.br"
    },
    "sha256": {
-    "regular": "f20f67813a551dd7551bf6881cdab41864192725e75eda4a4cb1e8366b742e68",
-    "bold": "769180d9fc59b4c60f9c025f283bd73b4169c6e2a6f70d91e8e21af0c26927bb"
+    "regular": "b439be34ad390d3e1b257e037ef8d81fa7d99659ffd52ea1229a5e62a4b8cedd",
+    "bold": "c6cd2e655b5de9d938b96add2f60965b5520b7c59c37d070dc70aa21aa49de05"
    },
    "ranges": [
-    [768, 887],
+    [32, 126],
+    [160, 887],
     [890, 895],
     [900, 906],
     [908, 908],
@@ -24,7 +25,7 @@
     [931, 993],
     [1008, 1327],
     [7296, 7304],
-    [7936, 7957],
+    [7680, 7957],
     [7960, 7965],
     [7968, 8005],
     [8008, 8013],
@@ -41,8 +42,15 @@
     [8178, 8180],
     [8182, 8190],
     [9676, 9676],
+    [11360, 11391],
     [11744, 11775],
     [42560, 42655],
+    [42784, 42954],
+    [42960, 42961],
+    [42963, 42963],
+    [42965, 42969],
+    [42994, 43007],
+    [43824, 43883],
     [65070, 65071]
    ]
   },
