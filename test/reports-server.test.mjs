@@ -82,6 +82,23 @@ test("a run starts, finishes, and exports a PDF and every table as CSV", async (
   assert.ok(listed.runs.some((r) => r.id === run.id && r.status === "done"));
 });
 
+test("a PDF or CSV about someone named in another script downloads under their name", async () => {
+  const cat = await (await fetch(`${base}/api/reports`)).json();
+  const fusion = cat.tenants.find((t) => t.generation === "fusion");
+  const { run } = await (await fetch(`${base}/api/reports/run`, json({ reportId: "user", tenant: fusion.id, window: "7d", timeZone: "Australia/Sydney", params: { user: "王芳" } }))).json();
+  const done = await finished(run.id);
+  assert.equal(done.document.subject, "王芳");
+  const pdf = await fetch(`${base}/api/reports/runs/${run.id}/pdf`);
+  assert.equal(pdf.status, 200);
+  const header = pdf.headers.get("content-disposition");
+  assert.match(header, /^attachment; filename="secops-user-investigation-\d{4}-\d{2}-\d{2}\.pdf"; filename\*=UTF-8''secops-user-investigation-%E7%8E%8B%E8%8A%B3-\d{4}-\d{2}-\d{2}\.pdf$/);
+  assert.match(decodeURIComponent(header.split("UTF-8''")[1]), /^secops-user-investigation-王芳-\d{4}-\d{2}-\d{2}\.pdf$/);
+  const table = done.document.sections.flatMap((s) => s.blocks).find((b) => b.kind === "table");
+  const csv = await fetch(`${base}/api/reports/runs/${run.id}/csv/${table.id}`);
+  assert.equal(csv.status, 200);
+  assert.match(decodeURIComponent(csv.headers.get("content-disposition").split("UTF-8''")[1]), new RegExp(`^secops-user-investigation-王芳-\\d{4}-\\d{2}-\\d{2}-${table.id}\\.csv$`));
+});
+
 test("a request a report can't run is refused before anything starts", async () => {
   const bad = [
     [{ reportId: "user", tenant: "all", params: { user: "k.walsh" } }, /one tenant/],

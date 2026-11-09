@@ -52,10 +52,41 @@ export function tableCsv(table: TableBlock, tz: string): string {
   return `\uFEFF${lines.join("\r\n")}\r\n`;
 }
 
+let graphemes: Intl.Segmenter | null = null;
+
+/**
+ * A file name part: letters and digits of any script, marks on them, and . @ _ -, so nothing a file system
+ * or a header treats specially. A letter that is an ASCII letter with accents comes out as it always has (the
+ * accent as a hyphen); any other letter stays itself, so a subject in Chinese or Polish is kept, not dropped.
+ */
+function slug(s: string): string {
+  const mapped = [...s.normalize("NFC")]
+    .map((ch) => {
+      const d = ch.normalize("NFKD");
+      return /[A-Za-z0-9]/.test(d) && !/(?![\x00-\x7f])[\p{L}\p{N}]/u.test(d) ? d.replace(/\p{M}/gu, "-") : ch;
+    })
+    .join("")
+    .replace(/[^\w.@\p{L}\p{N}\p{M}-]+/gu, "-")
+    .replace(/-+/g, "-")
+    .replace(/^-|-$/g, "");
+  graphemes ??= new Intl.Segmenter(undefined, { granularity: "grapheme" });
+  return [...graphemes.segment(mapped)].slice(0, 48).map((g) => g.segment).join("").toLowerCase();
+}
+
 /** "secops-user-investigation-jsmith-2026-11-06-devices.csv": safe on every file system. */
 export function exportName(doc: ReportDocument, ext: "pdf" | "csv", tableId?: string): string {
   const p = localParts(doc.generatedAt, doc.timeZone);
-  const slug = (s: string) => s.normalize("NFKD").replace(/[^\w.@-]+/g, "-").replace(/-+/g, "-").replace(/^-|-$/g, "").slice(0, 48).toLowerCase();
   const parts = ["secops", slug(doc.title), slug(doc.subject), `${p.year}-${pad(p.month)}-${pad(p.day)}`, tableId ? slug(tableId) : ""].filter(Boolean);
   return `${parts.join("-")}.${ext}`;
+}
+
+/**
+ * The Content-Disposition header for an export. A name beyond ASCII goes in filename* as UTF-8 (RFC 6266,
+ * RFC 8187), which every current browser reads, with the ASCII part of it in filename for anything older.
+ */
+export function contentDisposition(kind: "attachment" | "inline", name: string): string {
+  if (/^[\x20-\x7e]*$/.test(name)) return `${kind}; filename="${name}"`;
+  const ascii = name.replace(/[^\x20-\x7e]+/g, "").replace(/-{2,}/g, "-").replace(/^-/, "");
+  const encoded = encodeURIComponent(name).replace(/['()*]/g, (c) => `%${c.charCodeAt(0).toString(16).toUpperCase()}`);
+  return `${kind}; filename="${ascii}"; filename*=UTF-8''${encoded}`;
 }

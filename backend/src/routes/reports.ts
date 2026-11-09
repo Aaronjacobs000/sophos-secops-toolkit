@@ -14,7 +14,7 @@ import { GROUP_FIELDS, MATCH_SCHEMAS, SNAPSHOT_SCHEMAS, schemaLabel } from "../r
 import { checkRequest } from "../reports/runner.js";
 import { ReportJobs, summaryOf } from "../reports/jobs.js";
 import { ReportInputError } from "../reports/queries.js";
-import { exportName, findTable, tableCsv } from "../reports/csv.js";
+import { contentDisposition, exportName, findTable, tableCsv } from "../reports/csv.js";
 import { renderPdf, type Paper } from "../reports/pdf/render.js";
 import { sensorLabel } from "../mappers/views.js";
 
@@ -100,7 +100,7 @@ reportsRouter.get("/runs/:id/pdf", (req, res) => {
   const paper: Paper = req.query.paper === "letter" ? "letter" : "a4";
   const pdf = renderPdf(doc, { paper, csvName: (id) => exportName(doc, "csv", id) });
   res.setHeader("Content-Type", "application/pdf");
-  res.setHeader("Content-Disposition", `${req.query.inline === "1" ? "inline" : "attachment"}; filename="${exportName(doc, "pdf")}"`);
+  res.setHeader("Content-Disposition", contentDisposition(req.query.inline === "1" ? "inline" : "attachment", exportName(doc, "pdf")));
   res.send(pdf);
 });
 
@@ -113,6 +113,6 @@ reportsRouter.get("/runs/:id/csv/:table", (req, res) => {
     return;
   }
   res.setHeader("Content-Type", "text/csv; charset=utf-8");
-  res.setHeader("Content-Disposition", `attachment; filename="${exportName(run.document, "csv", table.id)}"`);
+  res.setHeader("Content-Disposition", contentDisposition("attachment", exportName(run.document, "csv", table.id)));
   res.send(tableCsv(table, run.document.timeZone));
 });

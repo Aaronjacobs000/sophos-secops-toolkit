@@ -22,7 +22,7 @@ const { DemoReportSource } = await import("../backend/dist/reports/demo.js");
 const { LiveReportSource } = await import("../backend/dist/reports/source.js");
 const { DemoProvider } = await import("../backend/dist/demo/demo-provider.js");
 const { DEFAULT_SETTINGS } = await import("../backend/dist/store/settings.js");
-const { csvField, tableCsv, exportName, tableIds, findTable } = await import("../backend/dist/reports/csv.js");
+const { csvField, tableCsv, exportName, contentDisposition, tableIds, findTable } = await import("../backend/dist/reports/csv.js");
 const { renderPdf, columnWidths, cellText } = await import("../backend/dist/reports/pdf/render.js");
 const { encode, measure, wrap, fit } = await import("../backend/dist/reports/pdf/fonts.js");
 const { formatDateTime, formatOffset, validTimeZone } = await import("../backend/dist/reports/format.js");
@@ -454,6 +454,25 @@ test("the Helvetica encoder on its own folds what it has no glyph for to a plain
   assert.ok(Math.abs(widths.reduce((a, b) => a + b, 0) - 500) < 0.01);
   assert.ok(widths[0] >= measure("6 Nov 2026 14:05", "regular", 7.6) + 8, "a time never wraps");
   assert.ok(widths[2] >= measure("SEVERITY", "bold", 6.4, 0.3) + 8, "a header never breaks inside its word");
+});
+
+test("export file names keep a subject in any script, and nothing a file system or a header treats specially", () => {
+  const named = (subject, tableId) => exportName({ title: "User investigation", subject, generatedAt: Date.parse("2026-11-09T03:00:00Z"), timeZone: "Australia/Sydney" }, tableId ? "csv" : "pdf", tableId);
+  assert.equal(named("王芳"), "secops-user-investigation-王芳-2026-11-09.pdf");
+  assert.equal(named("김민준", "devices"), "secops-user-investigation-김민준-2026-11-09-devices.csv", "Hangul stays as syllables");
+  assert.equal(named("สมชาย ใจดี"), "secops-user-investigation-สมชาย-ใจดี-2026-11-09.pdf", "Thai keeps its vowel marks");
+  assert.equal(named("Дмитрий Иванов"), "secops-user-investigation-дмитрий-иванов-2026-11-09.pdf");
+  assert.equal(named("Łukasz Nowak"), "secops-user-investigation-łukasz-nowak-2026-11-09.pdf");
+  assert.equal(named("فاطمة الزهراء (f.alzahra@harbourline.example)"), "secops-user-investigation-فاطمة-الزهراء-f.alzahra@harbourline.example-2026-11-09.pdf");
+  // As before for names with an ASCII form.
+  assert.equal(named("k.walsh@harbourline.example"), "secops-user-investigation-k.walsh@harbourline.example-2026-11-09.pdf");
+  assert.equal(named("Zoë Brontë"), "secops-user-investigation-zoe-bronte-2026-11-09.pdf");
+  assert.equal(named('a/b\\c:d*e?"<>|f'), "secops-user-investigation-a-b-c-d-e-f-2026-11-09.pdf");
+  assert.equal(named("王".repeat(60)), `secops-user-investigation-${"王".repeat(48)}-2026-11-09.pdf`, "48 characters at most");
+  assert.equal(named("𠀀".repeat(60)), `secops-user-investigation-${"𠀀".repeat(48)}-2026-11-09.pdf`, "never half a character");
+  // The download header carries the name as UTF-8, with the ASCII part for older clients.
+  assert.equal(contentDisposition("attachment", "secops-user-investigation-王芳-2026-11-09.pdf"), "attachment; filename=\"secops-user-investigation-2026-11-09.pdf\"; filename*=UTF-8''secops-user-investigation-%E7%8E%8B%E8%8A%B3-2026-11-09.pdf");
+  assert.equal(contentDisposition("inline", "secops-detections-and-alerts-all-tenants-40-2026-11-09.pdf"), 'inline; filename="secops-detections-and-alerts-all-tenants-40-2026-11-09.pdf"');
 });
 
 test("report times print in the run's zone with the month as a word", () => {
