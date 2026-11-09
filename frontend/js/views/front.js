@@ -377,11 +377,11 @@ function buildStage(model) {
 
   // labels: sources
   const labels = h("div", { class: "flow-labels" });
-  L.left.forEach((seg, i) => {
+  L.left.forEach((seg) => {
     const src = seg.src;
     const el = h(
       "div",
-      { class: "src-label", style: { left: pct(seg.ax - 16, W), top: pct(seg.y, H), "--i": i }, tabindex: "0" },
+      { class: "src-label", style: { left: pct(seg.ax - 16, W), top: pct(seg.y, H) }, tabindex: "0" },
       h("span", { class: "src-ic" }, icon(src.kind === "more" ? "grid" : sourceIcon(model.scope === "all" ? "tenant" : src.kind || src.label), 15)),
       h("span", { class: "src-name", text: src.label }),
       h("b", { class: "src-count num", text: num(src.count) }),
