@@ -442,7 +442,7 @@ test("the cover lists every section on A4 and US Letter, and cells wrap at separ
   assert.ok(lines.length > 1 && lines.every((l) => !/\d$/.test(l)), `no number is split from its unit: ${JSON.stringify(lines)}`);
 });
 
-test("text the standard fonts can't draw folds to a plain letter or a question mark, and wraps", () => {
+test("the Helvetica encoder on its own folds what it has no glyph for to a plain letter or a question mark (PDF text goes to the Noto fonts first), and text wraps", () => {
   assert.deepEqual(encode("Zoë – ł\u200b日"), [90, 111, 235, 32, 0x96, 32, 108, 63]);
   assert.equal(measure("WWW", "regular", 10), 28.32);
   const long = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
