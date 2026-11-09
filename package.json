@@ -17,10 +17,12 @@
     "start": "npm run build && node backend/dist/server.js",
     "demo": "npm run build && node backend/dist/server.js --demo",
     "test": "npm run build && node --test test/*.test.mjs",
-    "atlas": "node scripts/build-atlas.mjs"
+    "atlas": "node scripts/build-atlas.mjs",
+    "fonts": "npm run build && node scripts/build-pdf-fonts.mjs"
   },
   "dependencies": {
     "express": "^4.21.2",
+    "harfbuzzjs": "~1.6.4",
     "mmdb-lib": "^3.0.3"
   },
   "devDependencies": {

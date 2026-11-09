@@ -1,0 +1,192 @@
+{
+ "source": "https://github.com/google/fonts/tree/5bb28733cec313b63fbd415b574b5ae35c8aa8b8",
+ "fonts": [
+  {
+   "id": "greek-cyrillic",
+   "name": "NotoSans",
+   "licence": "OFL-NotoSans.txt",
+   "source": "ofl/notosans/NotoSans[wdth,wght].ttf",
+   "sourceSha256": "bfb7bb691513f12e734dc346c03a03f784912432d7e3fa8e56efcf906fe86b3d",
+   "files": {
+    "regular": "noto-greek-cyrillic-regular.ttf.br",
+    "bold": "noto-greek-cyrillic-bold.ttf.br"
+   },
+   "sha256": {
+    "regular": "f20f67813a551dd7551bf6881cdab41864192725e75eda4a4cb1e8366b742e68",
+    "bold": "769180d9fc59b4c60f9c025f283bd73b4169c6e2a6f70d91e8e21af0c26927bb"
+   },
+   "ranges": [
+    [768, 887],
+    [890, 895],
+    [900, 906],
+    [908, 908],
+    [910, 929],
+    [931, 993],
+    [1008, 1327],
+    [7296, 7304],
+    [7936, 7957],
+    [7960, 7965],
+    [7968, 8005],
+    [8008, 8013],
+    [8016, 8023],
+    [8025, 8025],
+    [8027, 8027],
+    [8029, 8029],
+    [8031, 8061],
+    [8064, 8116],
+    [8118, 8132],
+    [8134, 8147],
+    [8150, 8155],
+    [8157, 8175],
+    [8178, 8180],
+    [8182, 8190],
+    [9676, 9676],
+    [11744, 11775],
+    [42560, 42655],
+    [65070, 65071]
+   ]
+  },
+  {
+   "id": "arabic",
+   "name": "NotoSansArabic",
+   "licence": "OFL-NotoSansArabic.txt",
+   "source": "ofl/notosansarabic/NotoSansArabic[wdth,wght].ttf",
+   "sourceSha256": "63111b5b2e074dd48cc67692e0a2726d86ee94c1c37fe8598257b7b4e87e869e",
+   "files": {
+    "regular": "noto-arabic-regular.ttf.br",
+    "bold": "noto-arabic-bold.ttf.br"
+   },
+   "sha256": {
+    "regular": "97061ad011f4b44f01328b6cfb0b8b856f99fc10d8201a065b7471d270e683b4",
+    "bold": "186b1c01fbd9cd6242537aa3d98ec9b6f2efb1e7190b7f371a9c1147a10fe2be"
+   },
+   "ranges": [
+    [1536, 1791],
+    [1872, 1919],
+    [2160, 2190],
+    [2192, 2193],
+    [2200, 2303],
+    [9676, 9676],
+    [64336, 64450],
+    [64467, 64911],
+    [64914, 64967],
+    [64975, 64975],
+    [65008, 65023],
+    [65136, 65140],
+    [65142, 65276]
+   ]
+  },
+  {
+   "id": "hebrew",
+   "name": "NotoSansHebrew",
+   "licence": "OFL-NotoSansHebrew.txt",
+   "source": "ofl/notosanshebrew/NotoSansHebrew[wdth,wght].ttf",
+   "sourceSha256": "7ef36a2c3593758cdb622e1bdef4f84523e92fbc3ccc667438dd80ff54c2de88",
+   "files": {
+    "regular": "noto-hebrew-regular.ttf.br",
+    "bold": "noto-hebrew-bold.ttf.br"
+   },
+   "sha256": {
+    "regular": "7d2a7b61c7e5b4dddfc36aa3368ecc27d8f4d15c68b3c4988ba1c7fe8f47fbee",
+    "bold": "39a7af3023f9af1aa9dee20aa0194850a255476772731502d1a90256c66b40a8"
+   },
+   "ranges": [
+    [1425, 1479],
+    [1488, 1514],
+    [1519, 1524],
+    [9676, 9676],
+    [64285, 64310],
+    [64312, 64316],
+    [64318, 64318],
+    [64320, 64321],
+    [64323, 64324],
+    [64326, 64335]
+   ]
+  },
+  {
+   "id": "thai",
+   "name": "NotoSansThai",
+   "licence": "OFL-NotoSansThai.txt",
+   "source": "ofl/notosansthai/NotoSansThai[wdth,wght].ttf",
+   "sourceSha256": "5a1c559bb539583c8a1fd99d1c5b9491e5e14478c9cd2bd0970d5c3096cc9ef8",
+   "files": {
+    "regular": "noto-thai-regular.ttf.br",
+    "bold": "noto-thai-bold.ttf.br"
+   },
+   "sha256": {
+    "regular": "8018b94ce444ec2ed0f038a64a1d17b301814b5a5a345d1aea0c99e06f410c01",
+    "bold": "f0b750eac579d7db02caaa850be982e02f7a806d7d14269ed7bba26b1993cccd"
+   },
+   "ranges": [
+    [3585, 3642],
+    [3647, 3675],
+    [9676, 9676]
+   ]
+  },
+  {
+   "id": "korean",
+   "name": "NotoSansKR",
+   "licence": "OFL-NotoSansCJK.txt",
+   "source": "ofl/notosanskr/NotoSansKR[wght].ttf",
+   "sourceSha256": "194018e6b2b293a7964f037b25c0249ce1418bc9ab3c971060a03aa57861e252",
+   "files": {
+    "regular": "noto-korean-regular.ttf.br"
+   },
+   "sha256": {
+    "regular": "7722554e1a226726be52281455acb058bd5300bb311d3e277e25fb0b24e4f30c"
+   },
+   "ranges": [
+    [4352, 4607],
+    [12593, 12686],
+    [43360, 43388],
+    [44032, 55203],
+    [55216, 55238],
+    [55243, 55291],
+    [65440, 65470],
+    [65474, 65479],
+    [65482, 65487],
+    [65490, 65495],
+    [65498, 65500]
+   ]
+  },
+  {
+   "id": "cjk",
+   "name": "NotoSansSC",
+   "licence": "OFL-NotoSansCJK.txt",
+   "source": "ofl/notosanssc/NotoSansSC[wght].ttf",
+   "sourceSha256": "a3041811a78c361b1de50f953c805e0244951c21c5bd412f7232ef0d899af0da",
+   "files": {
+    "regular": "noto-cjk-regular.ttf.br"
+   },
+   "sha256": {
+    "regular": "3576f5a83f027a9d51749700f6118f8510471af8f6f7bda3e7c54a46e312cbe2"
+   },
+   "ranges": [
+    [12288, 12351],
+    [12353, 12438],
+    [12441, 12543],
+    [12549, 12591],
+    [12704, 12731],
+    [12784, 12830],
+    [12832, 13099],
+    [13101, 13311],
+    [19968, 40943],
+    [64014, 64015],
+    [64017, 64017],
+    [64019, 64020],
+    [64024, 64024],
+    [64031, 64033],
+    [64035, 64036],
+    [64039, 64041],
+    [65281, 65439],
+    [65441, 65470],
+    [65474, 65479],
+    [65482, 65487],
+    [65490, 65495],
+    [65498, 65500],
+    [65504, 65510],
+    [65512, 65518]
+   ]
+  }
+ ]
+}
