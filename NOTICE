@@ -23,6 +23,12 @@ Third-party assets, all bundled for offline use:
 - World map: world-atlas 2.0.2 (ISC, frontend/vendor/LICENSE-world-atlas.txt),
   derived from Natural Earth, which is in the public domain.
 - mmdb-lib (MIT), the MaxMind DB format reader used for DB-IP City Lite.
+- Noto Sans, Noto Sans Arabic, Noto Sans Hebrew, Noto Sans Thai, Noto Sans KR
+  and Noto Sans SC, for text in PDF reports that Helvetica can't draw, SIL Open
+  Font License 1.1 (backend/fonts/OFL-*.txt). Cut down to the scripts they
+  serve and pinned to static weights; ATTRIBUTIONS.md lists the changes.
+- harfbuzzjs (MIT), HarfBuzz compiled to WebAssembly, which shapes that text
+  and subsets those fonts when a PDF is written.
 - AI app marks in frontend/js/ai-logos.js: Simple Icons 16.36.0 (CC0-1.0,
   https://simpleicons.org). Each mark is a trademark of its owner, shown only
   to name the app; ATTRIBUTIONS.md lists them and the brand terms checked.

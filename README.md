@@ -276,7 +276,7 @@ If you open the toolkit to other machines, put HTTPS in front of it (a reverse p
 - Only identity sources fill the MFA fields. Microsoft Entra ID sign-ins do; Sophos endpoint logons always report no MFA, so they are listed but never counted as sign-ins without MFA. Only interactive user sign-ins are counted. Service principal and non-interactive sign-ins are listed separately.
 - The sign-in map places public source IPs with DB-IP City Lite (Setup). Private and internal addresses are counted but not placed.
 - AI Defense counts cover the last 7 days. One AI Defense activity can gather several related events. The API has no count of which person used which app, so the AI usage flow shows apps and users each against the outcome, not apps against people.
-- PDFs use the two Helvetica fonts every PDF reader has, so nothing is embedded. Latin letters with accents print correctly, but Chinese, Japanese, Korean, Thai, Cyrillic, Greek, Arabic and Hebrew characters print as "?". The CSV export keeps every character.
+- PDFs print Latin text in Helvetica, which every PDF reader has, and Chinese, Japanese, Korean, Thai, Cyrillic, Greek, Arabic and Hebrew text in bundled Noto fonts, embedded with only the characters the report uses. Other scripts (Devanagari, Tamil, Khmer and the like), emoji and CJK ideographs outside the main Unicode block (Extension A and beyond) still print as "?". Japanese kanji take the Simplified Chinese letterforms, and bold Chinese, Japanese or Korean is the regular weight drawn heavier. Copying Arabic out of a PDF is exact in Chrome, Edge and Acrobat; other viewers can drop or change a letter. The CSV export keeps every character.
 - The Read-Only role has not been tested against the newer APIs listed under [Add a Sophos API credential](#add-a-sophos-api-credential).
 - Two calls are undocumented and may change without notice: `qlSchemaMapV1` (Fusion GraphQL), which built the Schema Atlas snapshot once (the app never calls it), and `tenant { centralTenant { xdrOwnership } }`, which decides whether a tenant's cases are on Fusion (Cases v2) or Classic (cases v1). If the second fails, the toolkit tries v2 and then v1.
 
@@ -288,6 +288,7 @@ npm run build         # compiles only
 node scripts/report.mjs --list                                        # the reports, after npm run build
 node scripts/report.mjs --report executive --tenant all --out ./out   # a demo report's PDF and CSVs
 npm run atlas -- <qlSchemaMapV1.json> [legacy-schema-dir]             # rebuild the Atlas snapshot
+npm run fonts                                                         # rebuild backend/fonts from the pinned Noto sources
 ```
 
 The backend is TypeScript on Express in `backend/src`. The frontend is plain HTML, CSS and ES modules with no build step, in `frontend/`.
