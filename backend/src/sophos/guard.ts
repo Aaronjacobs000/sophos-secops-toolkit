@@ -31,7 +31,7 @@
  */
 
 import { AsyncLocalStorage } from "node:async_hooks";
-import { refuseRedirect, type FetchLike } from "../vendor/sophos-core/index.js";
+import { refuseRedirect, retryAfterMs, type FetchLike } from "../vendor/sophos-core/index.js";
 import { PRIORITY, type RateLimiter } from "./rate-limiter.js";
 
 export class ReadOnlyViolationError extends Error {
@@ -479,8 +479,9 @@ export function createGuardedFetch(options: GuardOptions): FetchLike {
       throw err;
     }
     if (response.status === 429) {
-      const retryAfter = Number(response.headers.get("Retry-After"));
-      options.limiter.backoff(Number.isFinite(retryAfter) ? retryAfter : null);
+      // Seconds or an HTTP date; Number() read a date as NaN, so the pause fell back to 30 s.
+      const waitMs = retryAfterMs(response.headers.get("Retry-After"));
+      options.limiter.backoff(waitMs === null ? null : waitMs / 1000);
     }
     if (limited) {
       const record: CallRecord = {

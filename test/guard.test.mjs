@@ -82,6 +82,15 @@ test("a 429 from Sophos pauses the credential's limiter", async () => {
   assert.ok(limiter.stats().pausedFor >= 11_000);
 });
 
+test("a 429 with a Retry-After date pauses the limiter until that date", async () => {
+  const limiter = new RateLimiter();
+  const at = new Date(Math.ceil(Date.now() / 1000) * 1000 + 90_000).toUTCString();
+  const f = createGuardedFetch({ limiter, baseFetch: async () => new Response("{}", { status: 429, headers: { "Retry-After": at } }) });
+  await f(`${REGION}/endpoint/v1/endpoints`);
+  const { pausedFor } = limiter.stats();
+  assert.ok(pausedFor >= 88_000 && pausedFor <= 93_000, `paused ${pausedFor} ms, not the 30 s default`);
+});
+
 // ------------------------------------------------------------------ Search GraphQL mutations
 
 const searchBody = (query, variables = { input: { text: "from auth earliest=-1h | aggregate count" } }, extra = {}) => ({ method: "POST", body: JSON.stringify({ query, variables, ...extra }) });
