@@ -36,6 +36,7 @@ import {
   RESOURCE_NAME_EXAMPLE,
   isCaseShortId,
   isLegacyCaseId,
+  isOtherDashedCaseId,
   isResourceName,
   isUuid,
   looksLikeEmail,
@@ -403,13 +404,17 @@ export class CasesService {
     };
   }
 
-  /** Turns a UUID or short ID (CSE00001) into the case UUID. A short ID costs one search. */
+  /**
+   * Turns a UUID or short ID (CSE00001, E-01167) into the case UUID. A short
+   * ID costs one search, and so does any other two part ID that is not a
+   * Classic one, in case Fusion has added another format.
+   */
   async resolveCaseId(tenantId: string, caseRef: string): Promise<{ id: string; warnings: string[] }> {
     const value = caseRef.trim();
     if (this.legacy && isLegacyCaseId(value)) return { id: value, warnings: [] };
     if (isUuid(value)) return { id: value, warnings: [] };
 
-    if (isCaseShortId(value)) {
+    if (isCaseShortId(value) || isOtherDashedCaseId(value)) {
       const shortId = value.toUpperCase();
       const { data, warnings } = await this.client.query<FusionCasesResponse>(tenantId, LIST_CASES, {
         arguments: {
@@ -429,7 +434,7 @@ export class CasesService {
     }
 
     throw new Error(
-      `Unrecognised case ID ${JSON.stringify(value)}. Expected a Fusion case UUID or a short ID like CSE00001.`
+      `Unrecognised case ID ${JSON.stringify(value)}. Expected a Fusion case UUID or a short ID like CSE00001 or E-01167.`
     );
   }
 

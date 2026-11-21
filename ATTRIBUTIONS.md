@@ -16,6 +16,8 @@ Local modifications, each marked "SecOps Toolkit local modification" in the sour
 | `fusion/queries/search.ts`, `services/search.ts` (new, 29/10/2026) | Search GraphQL client: start or reuse a search, poll every 5 seconds to a deadline, read every page by cursor, with policies for partial results, failure and expiry. Adapted from the sophos-central-mcp-server Search tools (MIT). `index.ts` adds it to `createSophosCore` as `search`. |
 | `fusion/queries/ai-defense.ts`, `services/ai-defense.ts` (new, 08/11/2026) | AI Defense reads: three query documents (overview, details, policy counts) trimmed to what the toolkit shows, the time window rule and a 90 s timeout. Adapted from the sophos-central-mcp-server AI Defense module (MIT, release 0.13.0). `index.ts` adds it to `createSophosCore` as `aiDefense`. No AI Defense write is ported. On 09/11/2026 the details read gained each user's actor id, and a fourth read was added, the toolkit's own: the flow (blocked and warned counts for the top 10 apps and users, one call, every slot a required variable). |
 
+On 21/11/2026 NotFusion's case short ID fix (commit `c439303`) was applied to `fusion/format.ts` and `services/cases.ts`: `E-01167` counts as a Fusion short ID beside `CSE00001`, only digits, a dash and digits (`1-598868`) counts as a Classic case ID, and any other two part ID is looked up by short ID.
+
 The toolkit uses only the read paths, plus the two Search GraphQL mutations that start a search job and change nothing in the tenant. The write methods that remain in the vendored files (isolation, scans, case writes) are never called, and the guard in `backend/src/sophos/guard.ts` refuses them even if one were.
 
 ## sophos-tenant-migration-tool (copied)
