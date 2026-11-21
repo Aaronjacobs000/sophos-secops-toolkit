@@ -18,6 +18,8 @@ Local modifications, each marked "SecOps Toolkit local modification" in the sour
 
 On 21/11/2026 NotFusion's case short ID fix (commit `c439303`) was applied to `fusion/format.ts` and `services/cases.ts`: `E-01167` counts as a Fusion short ID beside `CSE00001`, only digits, a dash and digits (`1-598868`) counts as a Classic case ID, and any other two part ID is looked up by short ID.
 
+On 21/11/2026 NotFusion's retry fix (commit `3744c1f`) was applied to `client/sophos-client.ts`: a 4xx whose body is not JSON is no longer retried. The old check matched the message `Sophos API error 404:`, but a non-JSON body gives `Sophos API error (404):`, so it was sent twice more.
+
 The toolkit uses only the read paths, plus the two Search GraphQL mutations that start a search job and change nothing in the tenant. The write methods that remain in the vendored files (isolation, scans, case writes) are never called, and the guard in `backend/src/sophos/guard.ts` refuses them even if one were.
 
 ## sophos-tenant-migration-tool (copied)

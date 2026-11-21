@@ -227,8 +227,10 @@ export class SophosClient {
           throw lastError;
         }
 
-        // Don't retry on 4xx client errors (message contains "error NNN:" where NNN is 4xx)
-        if (/Sophos API error 4\d\d:/.test(lastError.message)) {
+        // Don't retry on 4xx client errors. The status decides, not the message: a body that
+        // is not JSON reads "Sophos API error (404): ...", which the old /Sophos API error 4\d\d:/
+        // test missed, so those answers were sent twice more against the rate limit.
+        if (lastError instanceof SophosApiRequestError && lastError.status >= 400 && lastError.status < 500) {
           throw lastError;
         }
 
