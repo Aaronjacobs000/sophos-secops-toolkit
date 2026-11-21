@@ -177,8 +177,7 @@ export class SophosClient {
 
         if (response.status === 429) {
           // Rate limited: wait and retry
-          const retryAfter = response.headers.get("Retry-After");
-          const waitMs = retryAfter ? parseInt(retryAfter, 10) * 1000 : 5000;
+          const waitMs = retryAfterMs(response.headers.get("Retry-After")) ?? 5000;
           log().warn(`[sophos-client] Rate limited, waiting ${waitMs}ms (attempt ${attempt + 1})`);
           await this.sleep(waitMs);
           continue;
@@ -253,4 +252,18 @@ export class SophosClient {
   private sleep(ms: number): Promise<void> {
     return new Promise((resolve) => setTimeout(resolve, ms));
   }
+}
+
+/**
+ * A Retry-After header as the milliseconds to wait, or null when there is
+ * none or it can't be read. Sophos may send seconds or an HTTP date (RFC
+ * 9110, 10.2.3); a date waits until then, and one already gone waits 0.
+ * Either form is then waited out the same way, under the same limits.
+ */
+export function retryAfterMs(header: string | null | undefined, now: number = Date.now()): number | null {
+  const value = header?.trim();
+  if (!value) return null;
+  if (/^\d+$/.test(value)) return Number.parseInt(value, 10) * 1000;
+  const at = Date.parse(value);
+  return Number.isNaN(at) ? null : Math.max(0, at - now);
 }

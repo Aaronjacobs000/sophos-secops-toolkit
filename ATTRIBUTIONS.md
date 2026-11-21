@@ -20,6 +20,8 @@ On 21/11/2026 NotFusion's case short ID fix (commit `c439303`) was applied to `f
 
 On 21/11/2026 NotFusion's retry fix (commit `3744c1f`) was applied to `client/sophos-client.ts`: a 4xx whose body is not JSON is no longer retried. The old check matched the message `Sophos API error 404:`, but a non-JSON body gives `Sophos API error (404):`, so it was sent twice more.
 
+On 21/11/2026 NotFusion's Retry-After fix (commit `566d7f4`) was applied to `client/sophos-client.ts` and `client/fusion-client.ts`: `retryAfterMs` reads the header as seconds or as an HTTP date, so a date is waited out instead of parsing as NaN and retrying at once, and an unreadable header falls back to the default wait.
+
 The toolkit uses only the read paths, plus the two Search GraphQL mutations that start a search job and change nothing in the tenant. The write methods that remain in the vendored files (isolation, scans, case writes) are never called, and the guard in `backend/src/sophos/guard.ts` refuses them even if one were.
 
 ## sophos-tenant-migration-tool (copied)

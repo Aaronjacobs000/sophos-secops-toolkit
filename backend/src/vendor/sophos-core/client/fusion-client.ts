@@ -28,6 +28,7 @@ import { log } from "../logger.js";
 import { isTenantNotOnFusion } from "../fusion/case-reference-data.js";
 import type { TokenManager } from "../auth/token-manager.js";
 import type { SophosApiError } from "../types/sophos.js";
+import { retryAfterMs } from "./sophos-client.js";
 
 /** One entry of a GraphQL response `errors` array. */
 export interface GraphQLErrorEntry {
@@ -278,10 +279,7 @@ export class FusionClient {
         }
 
         if (response.status === 429) {
-          const retryAfter = response.headers.get("Retry-After");
-          const waitMs = retryAfter
-            ? parseInt(retryAfter, 10) * 1000
-            : this.backoffBaseMs * 5;
+          const waitMs = retryAfterMs(response.headers.get("Retry-After")) ?? this.backoffBaseMs * 5;
           log().warn(
             `[fusion-client] Rate limited, waiting ${waitMs}ms (attempt ${attempt + 1})`
           );
