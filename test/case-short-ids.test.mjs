@@ -33,6 +33,16 @@ test("E-##### is a Fusion short ID, not a Classic ID; only digits-dash-digits is
   }
 });
 
+// Sophos Fusion issues F-08717 beside CSE00001 and E-01167 since 26/11/2026.
+test("F-##### is a Fusion short ID, not a Classic ID or another two part ID", () => {
+  for (const id of ["F-08717", "f-08717"]) {
+    assert.equal(isCaseShortId(id), true, id);
+    assert.equal(isLegacyCaseId(id), false, id);
+    assert.equal(isOtherDashedCaseId(id), false, id);
+  }
+  for (const id of ["F-", "F08717", "F-0A"]) assert.equal(isCaseShortId(id), false, id);
+});
+
 test("resolveCaseId sends E-##### and other two part IDs to a Fusion shortId search, and Classic IDs to cases v1", async () => {
   const fusionQl = [];
   const fusion = {
