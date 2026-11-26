@@ -405,7 +405,7 @@ export class CasesService {
   }
 
   /**
-   * Turns a UUID or short ID (CSE00001, E-01167) into the case UUID. A short
+   * Turns a UUID or short ID (P-12345, CSE00001) into the case UUID. A short
    * ID costs one search, and so does any other two part ID that is not a
    * Classic one, in case Fusion has added another format.
    */
@@ -434,7 +434,7 @@ export class CasesService {
     }
 
     throw new Error(
-      `Unrecognised case ID ${JSON.stringify(value)}. Expected a Fusion case UUID or a short ID like CSE00001 or E-01167.`
+      `Unrecognised case ID ${JSON.stringify(value)}. Expected a Fusion case UUID or a short ID like P-12345 or CSE00001.`
     );
   }
 
